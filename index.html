@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MathStack — Mathematical Expression Calculator</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">∑</span>
+        <span class="logo-text">MathStack</span>
+        <span class="badge">DSA • STACK PROJECT</span>
+      </div>
+      <nav class="nav">
+        <a href="#calculator" class="nav-link active">Calculator</a>
+        <a href="#how-it-works" class="nav-link">How It Works</a>
+        <a href="#algorithm" class="nav-link">Algorithm</a>
+        <a href="#about" class="nav-link">About</a>
+      </nav>
+      <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero / Calculator -->
+    <section id="calculator" class="hero">
+      <div class="hero-content">
+        <h1 class="hero-title">Calculate. Convert. Understand.</h1>
+        <p class="hero-desc">
+          Evaluate mathematical expressions using a Stack-based Infix to Postfix algorithm.
+        </p>
+      </div>
+
+      <div class="calculator-card glass">
+        <div class="card-header">
+          <h2>Expression Calculator</h2>
+          <span class="card-subtitle">Infix → Postfix → Evaluation</span>
+        </div>
+
+        <div class="input-group">
+          <label for="expression">Enter Mathematical Expression</label>
+          <input
+            type="text"
+            id="expression"
+            placeholder="Example: (10 + 5) * 2"
+            autocomplete="off"
+            spellcheck="false"
+          />
+        </div>
+
+        <div class="btn-row">
+          <button id="calculateBtn" class="btn btn-primary">
+            <span class="btn-icon">▶</span> Calculate
+          </button>
+          <button id="clearBtn" class="btn btn-secondary">Clear</button>
+        </div>
+
+        <div class="examples">
+          <span class="examples-label">Try examples:</span>
+          <div class="example-btns">
+            <button class="example-btn" data-expr="10 + 5 * 2">10 + 5 * 2</button>
+            <button class="example-btn" data-expr="(10 + 5) * 2">(10 + 5) * 2</button>
+            <button class="example-btn" data-expr="20 / 4 + 3">20 / 4 + 3</button>
+            <button class="example-btn" data-expr="2 ^ 3 + 4">2 ^ 3 + 4</button>
+            <button class="example-btn" data-expr="(2 + 3) * (4 - 1)">(2 + 3) * (4 - 1)</button>
+            <button class="example-btn" data-expr="2 ^ 3 ^ 2">2 ^ 3 ^ 2</button>
+          </div>
+        </div>
+
+        <!-- Results -->
+        <div id="results" class="results hidden">
+          <div class="result-grid">
+            <div class="result-box">
+              <span class="result-label">Postfix Expression</span>
+              <code id="postfixResult" class="result-value mono"></code>
+            </div>
+            <div class="result-box result-final">
+              <span class="result-label">Final Result</span>
+              <code id="finalResult" class="result-value mono highlight"></code>
+            </div>
+          </div>
+        </div>
+
+        <div id="errorBox" class="error-box hidden"></div>
+      </div>
+    </section>
+
+    <!-- Algorithm Visualization -->
+    <section id="visualization" class="section viz-section">
+      <div class="section-header">
+        <h2>Algorithm Visualization</h2>
+        <p>Watch the Stack in action — step by step conversion and evaluation</p>
+      </div>
+
+      <div id="vizContainer" class="viz-container glass hidden">
+        <!-- Conversion Steps -->
+        <div class="viz-block">
+          <h3><span class="step-num">1</span> Infix → Postfix Conversion</h3>
+          <div class="viz-table-wrap">
+            <table class="viz-table" id="conversionTable">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Token</th>
+                  <th>Action</th>
+                  <th>Operator Stack</th>
+                  <th>Postfix Output</th>
+                </tr>
+              </thead>
+              <tbody id="conversionBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Evaluation Steps -->
+        <div class="viz-block">
+          <h3><span class="step-num">2</span> Postfix Evaluation</h3>
+          <div class="viz-table-wrap">
+            <table class="viz-table" id="evalTable">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Token</th>
+                  <th>Action</th>
+                  <th>Evaluation Stack</th>
+                </tr>
+              </thead>
+              <tbody id="evalBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Live Stack Display -->
+        <div class="stack-display">
+          <div class="stack-card">
+            <h4>Operator Stack (Conversion)</h4>
+            <div id="opStackViz" class="stack-viz"></div>
+          </div>
+          <div class="stack-card">
+            <h4>Evaluation Stack</h4>
+            <div id="evalStackViz" class="stack-viz"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="vizPlaceholder" class="viz-placeholder glass">
+        <div class="placeholder-icon">⊞</div>
+        <p>Enter an expression and click <strong>Calculate</strong> to see the algorithm visualization</p>
+      </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="section">
+      <div class="section-header">
+        <h2>How It Works</h2>
+        <p>Three stages powered entirely by the Stack data structure</p>
+      </div>
+      <div class="steps-grid">
+        <div class="step-card glass">
+          <div class="step-icon">①</div>
+          <h3>Tokenize</h3>
+          <p>The input expression is split into tokens: numbers (including decimals), operators <code>+ − * / % ^</code>, and parentheses.</p>
+        </div>
+        <div class="step-card glass">
+          <div class="step-icon">②</div>
+          <h3>Infix → Postfix</h3>
+          <p>Using the Shunting-Yard algorithm and an operator stack, the infix expression is converted to Reverse Polish Notation (postfix).</p>
+        </div>
+        <div class="step-card glass">
+          <div class="step-icon">③</div>
+          <h3>Evaluate</h3>
+          <p>A second stack evaluates the postfix expression: operands are pushed, operators pop two values, compute, and push the result.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Algorithm -->
+    <section id="algorithm" class="section algo-section">
+      <div class="section-header">
+        <h2>Algorithm Details</h2>
+        <p>Stack operations, precedence, and associativity rules</p>
+      </div>
+
+      <div class="algo-grid">
+        <div class="algo-card glass">
+          <h3>Operator Precedence</h3>
+          <table class="prec-table">
+            <thead>
+              <tr><th>Operator</th><th>Precedence</th><th>Associativity</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>^</code></td><td>3 (Highest)</td><td>Right</td></tr>
+              <tr><td><code>* / %</code></td><td>2</td><td>Left</td></tr>
+              <tr><td><code>+ −</code></td><td>1 (Lowest)</td><td>Left</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="algo-card glass">
+          <h3>Stack Interface</h3>
+          <pre class="code-block"><code>class Stack {
+  push(item)   // Add to top
+  pop()        // Remove & return top
+  peek()       // View top without removing
+  isEmpty()    // Check if empty
+  size()       // Number of elements
+  toArray()    // Snapshot for visualization
+}</code></pre>
+        </div>
+
+        <div class="algo-card glass full-width">
+          <h3>Shunting-Yard Conversion Rules</h3>
+          <ul class="rules-list">
+            <li><strong>Operand</strong> — Append directly to the postfix output.</li>
+            <li><strong>(</strong> — Push onto the operator stack.</li>
+            <li><strong>)</strong> — Pop operators to output until <code>(</code> is found; discard <code>(</code>.</li>
+            <li><strong>Operator</strong> — While top has higher precedence, or equal precedence and left-associative, pop to output. Then push current operator.</li>
+            <li><strong>End</strong> — Pop all remaining operators to the output.</li>
+          </ul>
+        </div>
+
+        <div class="algo-card glass full-width">
+          <h3>Postfix Evaluation Rules</h3>
+          <ul class="rules-list">
+            <li><strong>Operand</strong> — Push onto the evaluation stack.</li>
+            <li><strong>Operator</strong> — Pop second operand, then first operand. Compute <code>first ⊗ second</code> and push the result.</li>
+            <li><strong>End</strong> — The single remaining value on the stack is the answer.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section id="about" class="section about-section">
+      <div class="section-header">
+        <h2>About MathStack</h2>
+      </div>
+      <div class="about-card glass">
+        <p>
+          <strong>MathStack</strong> is a college Data Structures & Algorithms project that demonstrates
+          the practical use of the <strong>Stack</strong> ADT for mathematical expression evaluation.
+        </p>
+        <p>
+          Instead of relying on built-in language evaluation (<code>eval()</code>), every calculation
+          is performed by first converting the infix expression to postfix notation using the
+          Shunting-Yard algorithm, then evaluating the postfix expression — both stages driven
+          exclusively by stack operations.
+        </p>
+        <div class="tech-tags">
+          <span class="tag">HTML5</span>
+          <span class="tag">CSS3</span>
+          <span class="tag">Vanilla JavaScript</span>
+          <span class="tag">Stack ADT</span>
+          <span class="tag">Shunting-Yard</span>
+          <span class="tag">No Backend</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>MathStack — DSA Stack Project · Built with pure HTML, CSS &amp; JavaScript</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
